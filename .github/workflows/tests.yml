@@ -57,3 +57,12 @@ jobs:
         with:
           name: bottles_${{ matrix.os }}
           path: '*.bottle.*'
+
+      - name: Install the binary cask without a usable Xcode directory
+        if: runner.os == 'macOS' && github.event_name == 'push'
+        run: |
+          brew unlink mr-lexus/tap/harnesscope
+          DEVELOPER_DIR=/nonexistent/harnesscope-xcode-not-required brew install --cask mr-lexus/tap/harnesscope
+          harnesscope --version
+          harnesscope --help
+          brew uninstall --cask mr-lexus/tap/harnesscope
